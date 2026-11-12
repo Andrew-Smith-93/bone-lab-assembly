@@ -12,7 +12,7 @@ application networking, telemetry, subprocess execution, file import/export,
 plugin loader, scripting interface, credential access or autostart. GTK and its
 system theme/accessibility modules have their normal platform behavior; this is
 not an OS sandbox. Distribution library updates remain the user's responsibility.
-The test executable alone writes four fixed-name PNG files under `evidence/`.
+The test executable alone writes six fixed-name PNG files under `evidence/`.
 
 All formatted mathematical text uses static format strings and GLib allocation.
 Solver output is bounded to 200 bytes. Library callers must supply separate,
@@ -50,3 +50,19 @@ are not auto-detected in this release.
 Report non-sensitive issues in the repository issue tracker. Do not post secrets
 or exploit details publicly. For sensitive reports, use GitHub private vulnerability
 reporting if enabled; otherwise contact the repository owner privately first.
+
+## Typeset-math update
+
+All Pango markup templates are compile-time constants. Only validated floating-point
+numbers are substituted by `g_strdup_printf`; external strings never become markup.
+Labels use native GTK accessibility objects and selectable text. Typesetting adds
+no subprocess, network, file loading, webview or parser for user-authored equations.
+The existing solver and its input domain are unchanged.
+
+`--replace-version` permits only exact generated launchers for the specified old
+version to be replaced. `--activate-version` verifies the preserved binary's hash
+prefix before reactivating it. Staged launcher files are fsynced and replaced
+atomically per file; this is not a transaction across both launcher locations.
+Interrupted updates can be retried with the same explicit versions. The old binary
+is retained and no process is stopped or started. The trusted-home assumption
+remains; rollback does not authenticate code against an external signature.

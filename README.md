@@ -4,6 +4,14 @@ A native Linux x86-64 calculator for **inverse and forward kinematics**, written
 in GNU Intel-syntax assembly. A rotatable orthographic 3D bone view sits beside
 the equations, substituted intermediate values, joint coordinates and residual.
 
+The **Typeset mathematics** tab uses native GTK/Pango labels with Greek symbols,
+subscripts, superscripts, stacked fractions, vectors and a rotation matrix.
+[Full IK worksheet](evidence/typeset-ik.png) · [Full FK worksheet](evidence/typeset-fk.png).
+The **Plain-text working** tab retains a linear, selectable transcript. Displayed
+decimals are rounded; the solver uses full-precision doubles. The mathematical
+font is DejaVu Math TeX Gyre when available, with system font fallback. There is
+no browser, TeX subprocess, downloaded font or remote rendering service.
+
 ![Inverse kinematics with numerical working](evidence/ik.png)
 
 ## Build and launch
@@ -87,7 +95,8 @@ can make near-boundary results differ by a few ulps. No temporal continuity or
 physical safety guarantees are implied.
 
 Background: [CMU two-link kinematics](https://courses.ideate.cmu.edu/16-375/f2026/text/reference/two-link-kinematics.html).
-UI reference: [GTK 3 DrawingArea](https://docs.gtk.org/gtk3/class.DrawingArea.html).
+UI references: [GTK 3 DrawingArea](https://docs.gtk.org/gtk3/class.DrawingArea.html)
+and [Pango native text markup](https://docs.gtk.org/Pango/pango_markup.html).
 Implementation and illustrations are original; no private Bridge source is included.
 
 ## Tests
@@ -95,6 +104,7 @@ Implementation and illustrations are original; no private Bridge source is inclu
 ```sh
 make check       # independent Python oracle calls the actual assembly shared objects
 make ui-check    # needs an accessible display; offscreen windows only
+make install-check  # isolated temporary-home install / upgrade / rollback tests
 ```
 
 The fixture returns 77 if no display is available. UI tests use native control
@@ -111,8 +121,22 @@ python3 tools/install.py
 Installs the built program and a launcher under your user directories, including
 `~/Desktop/Bone-Lab.desktop`. No root access, autostart, network, permissions
 relaxation or automatic app launch. Existing different files are refused.
-Rollback: `python3 tools/install.py --uninstall` removes only files whose exact
-contents match this version. An empty version directory can remain.
+To update an existing install, explicitly name its 16-character version identifier:
+
+```sh
+python3 tools/install.py --replace-version OLD_VERSION
+# Roll back the launchers without rebuilding or stopping the running application:
+python3 tools/install.py --activate-version OLD_VERSION --replace-version NEW_VERSION
+```
+
+The identifiers are printed on installation and are the directory names beneath
+`~/.local/lib/bone-lab/`. Only exact matching old launchers are replaceable. Previous
+binaries remain installed for rollback; an already-running process is untouched.
+Each launcher replacement is atomic, but the pair is not a cross-file transaction.
+An interrupted update may leave launchers on different versions; rerun the same
+command to reconcile them. Uninstall: `python3 tools/install.py --uninstall`
+removes only exact files matching the currently built version; it does not remove
+older binaries. An empty version directory can remain.
 
 ## Assembly API
 

@@ -31,3 +31,21 @@ All 17 staged files were scanned for credential/key patterns, private filesystem
 paths, private email addresses and PNG metadata. No findings; publication starts
 from a fresh single-commit history. This is a scoped scan, not proof of absence
 of every possible secret.
+
+## Native typeset mathematics
+
+The equation renderer is assembly calling GTK/Pango. Symbolic and substituted
+fractions, Greek variables, subscripts/powers, a yaw rotation matrix, componentwise
+FK products and vector residuals were visually inspected in full worksheet PNGs.
+The law-of-cosines identity is explicitly conditional on an exact unconstrained
+solution; the raw target cosine is distinguished from the limited final angle.
+
+The unchanged numerical suite passes. Fatal-warning offscreen fixtures pass at
+1320×880 and 1024×820 logical window sizes, plus GTK scale 2. The scale-2 run
+checks GTK layout but PNG capture uses logical pixels. Native labels are selectable,
+have markup enabled and expose nonempty accessible names; notebook switching and
+IK/FK/invalid section visibility are asserted. A screen-reader session, physical
+monitor inspection and very large font overrides remain unverified.
+
+Isolated installer tests pass initial/repeat install, explicit upgrade, preservation
+of the old binary, version reactivation, uninstall and changed-file/symlink refusal.

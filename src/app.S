@@ -18,8 +18,13 @@ mov rdi,rax
 lea rsi,str0[rip]
 call gtk_window_set_title@PLT
 mov rdi,win[rip]
+#if defined(UI_TEST) && defined(NARROW_TEST)
+mov esi,1024
+mov edx,820
+#else
 mov esi,1320
 mov edx,880
+#endif
 call gtk_window_set_default_size@PLT
 mov rdi,win[rip]
 mov esi,20
@@ -605,17 +610,13 @@ call gtk_text_view_set_left_margin@PLT
 mov rdi,mathview[rip]
 mov esi,10
 call gtk_text_view_set_top_margin@PLT
-xor edi,edi
-xor esi,esi
-call gtk_scrolled_window_new@PLT
+mov rdi,mathview[rip]
+call math_panel_new
 mov scroll[rip],rax
 mov rdi,rax
 mov esi,-1
-mov edx,270
+mov edx,300
 call gtk_widget_set_size_request@PLT
-mov rdi,scroll[rip]
-mov rsi,mathview[rip]
-call gtk_container_add@PLT
 mov rsi,scroll[rip]
 mov rdi,right[rip]
 mov edx,1
@@ -744,6 +745,7 @@ call g_signal_connect_data@PLT
 call update
 mov rdi,win[rip]
 call gtk_widget_show_all@PLT
+call update
 #ifdef UI_TEST
  call ui_test
  END
@@ -1089,6 +1091,11 @@ call gtk_text_buffer_set_text@PLT
 mov rdi,reportstr[rip]
 mov esi,1
 call g_string_free@PLT
+lea rdi,inputs[rip]
+lea rsi,out[rip]
+mov edx,is_fk[rip]
+mov ecx,valid[rip]
+call math_panel_update
 movsd xmm0,values+80[rip]
 mulsd xmm0,radians[rip]
 movsd camera+0[rip],xmm0
@@ -1380,6 +1387,11 @@ ui_drain:
 
 cmp DWORD PTR valid[rip],1
 jne ui_failed
+mov edi,is_fk[rip]
+mov esi,valid[rip]
+call math_check
+test eax,eax
+jz ui_failed
 mov rdi,win[rip]
 call gtk_container_check_resize@PLT
 mov rdi,win[rip]
@@ -1403,6 +1415,10 @@ lea rsi,str212[rip]
 call cairo_surface_write_to_png@PLT
 test eax,eax
 jnz ui_failed
+lea rdi,typeset_ik[rip]
+call math_capture
+test eax,eax
+jnz ui_failed
 mov rdi,[rbp-24]
 call cairo_destroy@PLT
 mov rdi,[rbp-16]
@@ -1412,6 +1428,11 @@ movsd xmm0,dbl213[rip]
 call gtk_spin_button_set_value@PLT
 cmp DWORD PTR valid[rip],1
 jne ui_failed
+mov edi,is_fk[rip]
+mov esi,valid[rip]
+call math_check
+test eax,eax
+jz ui_failed
 mov rdi,win[rip]
 call gtk_container_check_resize@PLT
 mov rdi,win[rip]
@@ -1455,6 +1476,11 @@ movsd xmm0,dbl217[rip]
 call gtk_spin_button_set_value@PLT
 cmp DWORD PTR valid[rip],1
 jne ui_failed
+mov edi,is_fk[rip]
+mov esi,valid[rip]
+call math_check
+test eax,eax
+jz ui_failed
 mov rdi,win[rip]
 call gtk_container_check_resize@PLT
 mov rdi,win[rip]
@@ -1493,6 +1519,10 @@ lea rsi,str218[rip]
 call cairo_surface_write_to_png@PLT
 test eax,eax
 jnz ui_failed
+lea rdi,typeset_fk[rip]
+call math_capture
+test eax,eax
+jnz ui_failed
 mov rdi,[rbp-24]
 call cairo_destroy@PLT
 mov rdi,[rbp-16]
@@ -1518,6 +1548,11 @@ movsd xmm0,dbl220[rip]
 call gtk_spin_button_set_value@PLT
 cmp DWORD PTR valid[rip],0
 jne ui_failed
+mov edi,is_fk[rip]
+mov esi,valid[rip]
+call math_check
+test eax,eax
+jz ui_failed
 mov rdi,win[rip]
 call gtk_container_check_resize@PLT
 mov rdi,win[rip]
@@ -1797,7 +1832,7 @@ str218: .asciz "evidence/fk.png"
 dbl219: .double 100
 dbl220: .double 20
 str221: .asciz "evidence/invalid.png"
-str222: .asciz "PASS: offscreen GTK controls, IK/FK mode, unreachable and invalid states; four PNGs"
+str222: .asciz "PASS: offscreen GTK controls, IK/FK mode, unreachable and invalid states; six PNGs; typeset labels, accessible names and transcript tab"
 .bss
 .align 8
 win: .skip 8
@@ -1826,7 +1861,7 @@ is_fk: .skip 8
 .section .note.GNU-stack,"",@progbits
 
 .section .rodata
-css: .asciz "* { font-family: sans-serif; font-size: 14px; } window, box, grid, label { background-color: #f5f7fb; color: #192840; } textview text { background-color: #ffffff; color: #192840; } textview { font-family: monospace; font-size: 13px; } spinbutton, spinbutton entry { background: #ffffff; color: #192840; } spinbutton:disabled, spinbutton entry:disabled { color: #677385; background: #e8edf4; }"
+css: .asciz "* { font-family: sans-serif; font-size: 14px; } window, box, grid, label { background-color: #f5f7fb; color: #192840; } textview text { background-color: #ffffff; color: #192840; } textview { font-family: monospace; font-size: 13px; } spinbutton, spinbutton entry { background: #ffffff; color: #192840; } notebook, notebook header, notebook tab { background: #e8edf5; color: #192840; } notebook tab:checked { background: #ffffff; border-bottom: 2px solid #2454a4; } spinbutton:disabled, spinbutton entry:disabled { color: #677385; background: #e8edf4; }"
 
 .section .rodata
 ready_status: .asciz "Ready"
@@ -1850,3 +1885,7 @@ precision_detail: .asciz "NUMERICAL PRECISION LIMIT: radial geometry is feasible
 .section .rodata
 test_negative_one: .double -1
 test_camera: .double 35
+
+.section .rodata
+typeset_ik: .asciz "evidence/typeset-ik.png"
+typeset_fk: .asciz "evidence/typeset-fk.png"

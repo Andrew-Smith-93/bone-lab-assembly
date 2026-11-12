@@ -22,3 +22,9 @@ an unstable inner-radius calculation, overly broad singularity wording and weak
 UI assertions. Stable half-angle/hypot formulas, precision-specific status and
 stronger signal-driven assertions address these. FK-only output validity is now
 documented in the public ABI contract. See VERIFICATION.md for evidence limits.
+
+The typesetting follow-up received independent math/ABI/installer review. It found
+no security blocker and confirmed fractions, vector/matrix formulas, variadic
+calls, register preservation and allocation cleanup. The review requested that
+the cosine identity be qualified for exact unconstrained solutions and update
+rollback semantics be documented; both corrections are included.
