@@ -89,3 +89,35 @@ preservation defect. Its minor gesture-ownership and redundant redraw findings
 were corrected, and the final changes were reviewed again. Staged source and
 documentation passed scoped credential/private-path scans; PNGs contain no text
 or EXIF metadata. PIE, full RELRO, immediate binding and nonexecutable stack remain.
+
+## Pose atlas, history and camera tools
+
+The expanded application contains 1,247,619 .S source lines: 1,242,400 generated
+atlas-data source lines and 5,219 non-generated assembly lines. Exact counts and
+per-file scope are saved in SOURCE_METRICS.json and checked by make check. The
+1,242,387 generated .double directives encode 138,043 poses consumed by the
+native search; they are not filler or a claim of handwritten algorithmic volume.
+
+Passed against this update:
+
+- Every atlas record independently checked against trigonometry and unit-vector
+  norms; 17 independent nearest-pose oracle cases, both bend branches, 74 malformed
+  inputs, no-sample limits, null pointers and deterministic repeated results.
+- Opaque 64-snapshot history: six suites including 5,000 model-checked randomized
+  operations, overflow eviction, duplicates preserving redo, redo invalidation,
+  reset, all-byte comparisons, unaligned buffers and untouched unavailable output.
+- Native GTK integration: Undo/Redo, branching, seven guided examples, mode and bend
+  retention, shoulder-limited search, applying a sampled pose as one undoable FK
+  change, invalid/empty results and disabling stale results after input changes.
+- Front/Side/Above camera presets, grid/axes/target toggles, discrete wheel zoom,
+  proportional smooth zoom, ignored horizontal/NaN scroll, and both scroll-event
+  subscription masks. Physical trackpad delivery is not implied by synthetic events.
+- Existing exact solver/projection regressions, default scroll-free Results, full
+  typeset/plain-text math, MMB gestures, normal/narrow/scale-2 offscreen layouts,
+  clean teardown and versioned installer lifecycle continue to pass.
+
+Independent read-only review found no remaining concrete assembly ABI, snapshot
+size, stale-apply, branch-mirroring or security defect after the smooth-scroll
+subscription issue was corrected. Runtime remains native assembly, with no new
+network, subprocess, telemetry, persistent history, file import/export or clipboard
+access. The optional test suite uses preinstalled Python/PyGObject tooling.

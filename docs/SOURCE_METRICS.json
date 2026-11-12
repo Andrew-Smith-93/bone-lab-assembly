@@ -1,0 +1,19 @@
+{
+  "scope": ".S source lines including comments and blank lines; no Python or Markdown counted",
+  "assembly_source_lines": 1247619,
+  "generated_assembly_source_lines": 1242400,
+  "non_generated_assembly_source_lines": 5219,
+  "generated_pose_records": 138043,
+  "generated_pose_data_directives": 1242387,
+  "generated_pose_data_bytes": 9939096,
+  "files": {
+    "src/app.S": 2333,
+    "src/atlas.S": 162,
+    "src/features.S": 902,
+    "src/generated/pose_atlas.S": 1242400,
+    "src/history.S": 138,
+    "src/math.S": 1302,
+    "src/projection.S": 64,
+    "src/solver.S": 318
+  }
+}

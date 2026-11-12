@@ -45,7 +45,7 @@ assert adjustment.get_upper() <= adjustment.get_page_size(), (adjustment.get_upp
 assert canvas.get_allocated_height() == 230
 assert window.get_allocated_width() <= 1120 and window.get_allocated_height() <= 760
 # Both complete mathematical representations remain present.
-assert notebook.get_n_pages() == 3
+assert notebook.get_n_pages() == 4
 assert any(isinstance(w, Gtk.TextView) and w.get_buffer().get_char_count() > 500 for w in widgets)
 device = Gdk.Display.get_default().get_default_seat().get_pointer()
 clock = 1000

@@ -15,6 +15,38 @@ no browser, TeX subprocess, downloaded font or remote rendering service.
 
 ![Inverse kinematics with numerical working](evidence/ik.png)
 
+## New pose and camera tools
+
+- **Pose tools** adds a 64-snapshot Undo/Redo history and seven guided examples:
+  reachable and unreachable targets, straight and folded singularities, the other
+  elbow bend, a forward pose and a shoulder-limited search. Loading examples and
+  applying search results are single undoable pose changes. Camera changes are
+  independent. History stays in memory and resets when the app closes.
+- **Shoulder-constrained search** scans 138,043 offline poses against the current
+  target, bone lengths, elbow limits and bend direction, plus independent yaw and
+  pitch bounds. Review the approximate error, then **Use sampled pose in FK**.
+  Changing inputs invalidates that result until searched again. Empty narrow bounds
+  mean no grid sample, not proof that a continuous solution is impossible.
+- The grid is 5° yaw / 6° pitch / 6° flexion. The exact analytic IK solver remains
+  separate and unrestricted at the shoulder. See [atlas model and ABI](docs/ATLAS.md).
+- Scroll the wheel over the 3D view to zoom; smooth scrolling is proportional.
+  **Camera / zoom controls** now includes Front, Side and Above views plus grid,
+  axes and target visibility switches. Above is an 85° elevation, not a 90° top view.
+
+### Source size, clearly separated
+
+The repository contains **1,247,619 lines of .S assembly source** at this release:
+**1,242,400 generated assembly-data source lines** and **5,219 non-generated
+assembly source lines**. The generated file includes 1,242,387 meaningful `.double`
+directives encoding the runtime-used atlas, rather than padding instructions.
+This is not 1.2 million lines of handwritten algorithmic code. The read-only atlas
+adds 9,939,096 bytes (about 9.48 MiB) to the native binary.
+
+[Exact per-file accounting](docs/SOURCE_METRICS.json) is reproducible with
+`python3 tools/source_metrics.py`. The atlas is reproducible with
+`python3 tools/generate_atlas.py --check`. The source-size target does not replace
+correctness, performance or security testing.
+
 ## Build and launch
 
 Requires GCC/binutils, make, glibc, GTK 3, GDK 3, GLib/GObject, Cairo and libm.
@@ -110,10 +142,12 @@ Implementation and illustrations are original; no private Bridge source is inclu
 ## Tests
 
 ```sh
-make check       # independent Python oracle calls the actual assembly shared objects
+make check       # solver, projection, pose-history, atlas oracles and source accounting
 make ui-check    # needs an accessible display; offscreen windows only
 make install-check  # isolated temporary-home install / upgrade / rollback tests
 make pointer-check  # synthetic GDK events; requires Python PyGObject + GTK 3 typelib
+make features-check # history, examples, atlas application and camera UI integration
+make check-all      # all build/numerical/UI/install checks; needs an accessible display
 ```
 
 The fixture returns 77 if no display is available. UI tests use native control

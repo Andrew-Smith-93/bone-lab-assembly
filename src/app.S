@@ -667,6 +667,9 @@ mov edx,1
 mov ecx,1
 xor r8d,r8d
 call gtk_box_pack_start@PLT
+mov rdi,scroll[rip]
+mov rsi,grid[rip]
+call features_new
 mov rdi,canvas[rip]
 lea rsi,str85[rip]
 lea rdx,draw[rip]
@@ -813,6 +816,8 @@ call gtk_main_quit@PLT
 .quit_done:
 END
 FN update
+cmp DWORD PTR features_busy[rip],0
+jne .update_finished
 mov rdi,spins+0[rip]
 call gtk_spin_button_get_value@PLT
 movsd values+0[rip],xmm0
@@ -1160,8 +1165,10 @@ movsd camera+0[rip],xmm0
 movsd xmm0,values+88[rip]
 mulsd xmm0,radians[rip]
 movsd camera+8[rip],xmm0
+call features_update
 mov rdi,canvas[rip]
 call gtk_widget_queue_draw@PLT
+.update_finished:
 END
 FN line
 mov [rbp-8],rsi
@@ -1235,6 +1242,8 @@ movsd xmm0,dbl132[rip]
 movsd xmm1,dbl133[rip]
 movsd xmm2,dbl134[rip]
 call cairo_set_source_rgb@PLT
+cmp DWORD PTR scene_flags[rip],0
+je .skip_grid
 lea rdi,pt135[rip]
 lea rsi,pt136[rip]
 call line
@@ -1289,6 +1298,9 @@ call line
 lea rdi,pt169[rip]
 lea rsi,pt170[rip]
 call line
+.skip_grid:
+cmp DWORD PTR scene_flags+4[rip],0
+je .skip_axes
 mov rdi,cr[rip]
 movsd xmm0,dbl171[rip]
 movsd xmm1,dbl172[rip]
@@ -1364,6 +1376,7 @@ call cairo_set_font_size@PLT
 mov rdi,cr[rip]
 lea rsi,str188[rip]
 call cairo_show_text@PLT
+.skip_axes:
 cmp DWORD PTR valid[rip],0
 je draw_done
 mov rdi,cr[rip]
@@ -1399,6 +1412,8 @@ call dot
 lea rdi,out+WX[rip]
 movsd xmm0,dbl201[rip]
 call dot
+cmp DWORD PTR scene_flags+8[rip],0
+je draw_done
 cmp DWORD PTR is_fk[rip],0
 jne draw_done
 mov rdi,cr[rip]
@@ -1755,7 +1770,7 @@ dbl80: .double 3
 dbl81: .double 0.05
 dbl82: .double 1
 str83: .asciz "0° = straight • 180° = folded\nChanges update the pose immediately."
-str84: .asciz "Hold middle mouse + drag to orbit • Blue / teal: bones • Red ring: target"
+str84: .asciz "MMB + drag: orbit • Wheel: zoom • Blue / teal: bones • Red ring: target"
 str85: .asciz "draw"
 str86: .asciz "changed"
 str87: .asciz "toggled"
@@ -2313,3 +2328,6 @@ movsd values+96[rip],xmm0
 mov rdi,canvas[rip]
 call gtk_widget_queue_draw@PLT
 END
+
+.global spins, values, mode, branch, is_fk, valid, canvas, scroll, win
+.hidden spins, values, mode, branch, is_fk, valid, canvas, scroll, win

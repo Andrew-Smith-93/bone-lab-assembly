@@ -1145,7 +1145,7 @@ mov [rbp-4],edi
 mov [rbp-8],esi
 mov rdi,m_book[rip]
 call gtk_notebook_get_n_pages@PLT
-cmp eax,3
+cmp eax,4
 jne .math_bad
 mov rdi,m_valid[rip]
 call gtk_widget_get_visible@PLT

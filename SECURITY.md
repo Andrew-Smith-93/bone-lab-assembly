@@ -75,3 +75,20 @@ The optional pointer test uses installed PyGObject to send synthetic GDK events 
 the offscreen test widget. It does not move the desktop pointer or add a runtime
 Python dependency. The test-only shared fixture binds its internal assembly symbols
 locally; it is not installed or shipped as an application library.
+
+
+## Offline atlas and pose history
+
+The generated pose atlas is original, deterministic trigonometric data emitted by
+local Python tooling and linked read-only into the native application. No external
+asset, model, code or private project content is imported. The search validates
+finite input ranges and ordered angular bounds, uses fixed-size caller buffers
+and performs a bounded scan without allocation. Pose history has a fixed capacity
+of 64 opaque 128-byte snapshots in process memory, with no file persistence.
+New presets, history, scene controls and constrained search add no runtime network,
+subprocess, file import/export, telemetry, credentials or clipboard access. The
+additional screenshot function exists only in the test build.
+
+Nearest-sampled search must not be treated as a continuous optimality guarantee,
+robot controller, collision check or medical/anatomical model. No safety-critical
+hardware or human decisions should be based on the illustrative calculator alone.
