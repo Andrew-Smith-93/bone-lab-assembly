@@ -24,3 +24,9 @@ build/ui-narrow: src/app.S src/math.S src/solver.S src/projection.S src/layout.i
 install-check: build/bone-ik
 	python3 tests/install.py
 .PHONY: install-check
+
+build/libui-fixture.so: src/app.S src/math.S src/solver.S src/projection.S src/layout.inc | build
+	$(CC) $(ASMFLAGS) -shared -Wl,-Bsymbolic,-z,relro,-z,now,-z,noexecstack -DUI_TEST -o $@ src/app.S src/math.S src/solver.S src/projection.S $(LIBS)
+pointer-check: build/libui-fixture.so
+	G_DEBUG=fatal-warnings python3 tests/pointer.py
+.PHONY: pointer-check

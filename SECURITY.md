@@ -66,3 +66,12 @@ atomically per file; this is not a transaction across both launcher locations.
 Interrupted updates can be retried with the same explicit versions. The old binary
 is retained and no process is stopped or started. The trusted-home assumption
 remains; rollback does not authenticate code against an external signature.
+
+
+The compact UI update adds only GTK gestures, grouped controls and a result summary.
+Middle-button routing uses native GTK event controllers, with no raw event-structure
+parsing or pointer capture outside GTK. Camera motion does not change solver inputs.
+The optional pointer test uses installed PyGObject to send synthetic GDK events to
+the offscreen test widget. It does not move the desktop pointer or add a runtime
+Python dependency. The test-only shared fixture binds its internal assembly symbols
+locally; it is not installed or shipped as an application library.

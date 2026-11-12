@@ -20,14 +20,14 @@ call gtk_window_set_title@PLT
 mov rdi,win[rip]
 #if defined(UI_TEST) && defined(NARROW_TEST)
 mov esi,1024
-mov edx,820
+mov edx,720
 #else
-mov esi,1320
-mov edx,880
+mov esi,1120
+mov edx,760
 #endif
 call gtk_window_set_default_size@PLT
 mov rdi,win[rip]
-mov esi,20
+mov esi,14
 call gtk_container_set_border_width@PLT
 mov edi,1
 mov esi,12
@@ -62,48 +62,56 @@ mov edx,1
 mov ecx,1
 xor r8d,r8d
 call gtk_box_pack_start@PLT
+xor edi,edi
+xor esi,esi
+call gtk_scrolled_window_new@PLT
+mov sidebar[rip],rax
+mov rdi,rax
+mov esi,2
+mov edx,1
+call gtk_scrolled_window_set_policy@PLT
+mov rdi,sidebar[rip]
+mov esi,286
+mov edx,-1
+call gtk_widget_set_size_request@PLT
+mov rsi,sidebar[rip]
+mov rdi,body[rip]
+xor edx,edx
+xor ecx,ecx
+xor r8d,r8d
+call gtk_box_pack_start@PLT
 mov edi,1
-mov esi,8
+mov esi,10
 call gtk_box_new@PLT
 mov controls[rip],rax
 mov rsi,rax
-mov rdi,body[rip]
-mov edx,0
-mov ecx,0
-xor r8d,r8d
-call gtk_box_pack_start@PLT
-lea rdi,str3[rip]
-call gtk_check_button_new_with_label@PLT
+mov rdi,sidebar[rip]
+call gtk_container_add@PLT
+call gtk_combo_box_text_new@PLT
 mov mode[rip],rax
+mov rdi,rax
+lea rsi,ik_mode[rip]
+call gtk_combo_box_text_append_text@PLT
+mov rdi,mode[rip]
+lea rsi,fk_mode[rip]
+call gtk_combo_box_text_append_text@PLT
+mov rdi,mode[rip]
+xor esi,esi
+call gtk_combo_box_set_active@PLT
+mov rdi,mode[rip]
+lea rsi,mode_help[rip]
+call gtk_widget_set_tooltip_text@PLT
+mov rax,mode[rip]
 mov rsi,rax
 mov rdi,controls[rip]
 mov edx,0
 mov ecx,0
 xor r8d,r8d
 call gtk_box_pack_start@PLT
-lea rdi,str4[rip]
-call gtk_check_button_new_with_label@PLT
-mov branch[rip],rax
-mov rsi,rax
-mov rdi,controls[rip]
-mov edx,0
-mov ecx,0
-xor r8d,r8d
-call gtk_box_pack_start@PLT
-call gtk_grid_new@PLT
-mov grid[rip],rax
-mov rsi,rax
-mov rdi,controls[rip]
-mov edx,0
-mov ecx,0
-xor r8d,r8d
-call gtk_box_pack_start@PLT
-mov rdi,grid[rip]
-mov esi,7
-call gtk_grid_set_row_spacing@PLT
-mov rdi,grid[rip]
-mov esi,12
-call gtk_grid_set_column_spacing@PLT
+lea rdi,target_title[rip]
+mov esi,0
+call settings_group
+mov target_group[rip],rax
 lea rdi,str5[rip]
 call gtk_label_new_with_mnemonic@PLT
 mov temp[rip],rax
@@ -206,142 +214,10 @@ mov ecx,2
 mov r8d,1
 mov r9d,1
 call gtk_grid_attach@PLT
-lea rdi,str23[rip]
-call gtk_label_new_with_mnemonic@PLT
-mov temp[rip],rax
-mov rdi,rax
-movsd xmm0,dbl24[rip]
-call gtk_label_set_xalign@PLT
-mov rdi,grid[rip]
-mov rsi,temp[rip]
-xor edx,edx
-mov ecx,3
-mov r8d,1
-mov r9d,1
-call gtk_grid_attach@PLT
-movsd xmm0,dbl25[rip]
-movsd xmm1,dbl26[rip]
-movsd xmm2,dbl27[rip]
-call gtk_spin_button_new_with_range@PLT
-mov spins+24[rip],rax
-mov rdi,rax
-mov esi,2
-call gtk_spin_button_set_digits@PLT
-mov rdi,spins+24[rip]
-movsd xmm0,dbl28[rip]
-call gtk_spin_button_set_value@PLT
-mov rdi,temp[rip]
-mov rsi,spins+24[rip]
-call gtk_label_set_mnemonic_widget@PLT
-mov rdi,grid[rip]
-mov rsi,spins+24[rip]
-mov edx,1
-mov ecx,3
-mov r8d,1
-mov r9d,1
-call gtk_grid_attach@PLT
-lea rdi,str29[rip]
-call gtk_label_new_with_mnemonic@PLT
-mov temp[rip],rax
-mov rdi,rax
-movsd xmm0,dbl30[rip]
-call gtk_label_set_xalign@PLT
-mov rdi,grid[rip]
-mov rsi,temp[rip]
-xor edx,edx
-mov ecx,4
-mov r8d,1
-mov r9d,1
-call gtk_grid_attach@PLT
-movsd xmm0,dbl31[rip]
-movsd xmm1,dbl32[rip]
-movsd xmm2,dbl33[rip]
-call gtk_spin_button_new_with_range@PLT
-mov spins+32[rip],rax
-mov rdi,rax
-mov esi,2
-call gtk_spin_button_set_digits@PLT
-mov rdi,spins+32[rip]
-movsd xmm0,dbl34[rip]
-call gtk_spin_button_set_value@PLT
-mov rdi,temp[rip]
-mov rsi,spins+32[rip]
-call gtk_label_set_mnemonic_widget@PLT
-mov rdi,grid[rip]
-mov rsi,spins+32[rip]
-mov edx,1
-mov ecx,4
-mov r8d,1
-mov r9d,1
-call gtk_grid_attach@PLT
-lea rdi,str35[rip]
-call gtk_label_new_with_mnemonic@PLT
-mov temp[rip],rax
-mov rdi,rax
-movsd xmm0,dbl36[rip]
-call gtk_label_set_xalign@PLT
-mov rdi,grid[rip]
-mov rsi,temp[rip]
-xor edx,edx
-mov ecx,5
-mov r8d,1
-mov r9d,1
-call gtk_grid_attach@PLT
-movsd xmm0,dbl37[rip]
-movsd xmm1,dbl38[rip]
-movsd xmm2,dbl39[rip]
-call gtk_spin_button_new_with_range@PLT
-mov spins+40[rip],rax
-mov rdi,rax
-mov esi,2
-call gtk_spin_button_set_digits@PLT
-mov rdi,spins+40[rip]
-movsd xmm0,dbl40[rip]
-call gtk_spin_button_set_value@PLT
-mov rdi,temp[rip]
-mov rsi,spins+40[rip]
-call gtk_label_set_mnemonic_widget@PLT
-mov rdi,grid[rip]
-mov rsi,spins+40[rip]
-mov edx,1
-mov ecx,5
-mov r8d,1
-mov r9d,1
-call gtk_grid_attach@PLT
-lea rdi,str41[rip]
-call gtk_label_new_with_mnemonic@PLT
-mov temp[rip],rax
-mov rdi,rax
-movsd xmm0,dbl42[rip]
-call gtk_label_set_xalign@PLT
-mov rdi,grid[rip]
-mov rsi,temp[rip]
-xor edx,edx
-mov ecx,6
-mov r8d,1
-mov r9d,1
-call gtk_grid_attach@PLT
-movsd xmm0,dbl43[rip]
-movsd xmm1,dbl44[rip]
-movsd xmm2,dbl45[rip]
-call gtk_spin_button_new_with_range@PLT
-mov spins+48[rip],rax
-mov rdi,rax
-mov esi,2
-call gtk_spin_button_set_digits@PLT
-mov rdi,spins+48[rip]
-movsd xmm0,dbl46[rip]
-call gtk_spin_button_set_value@PLT
-mov rdi,temp[rip]
-mov rsi,spins+48[rip]
-call gtk_label_set_mnemonic_widget@PLT
-mov rdi,grid[rip]
-mov rsi,spins+48[rip]
-mov edx,1
-mov ecx,6
-mov r8d,1
-mov r9d,1
-call gtk_grid_attach@PLT
+lea rdi,angle_title[rip]
+mov esi,0
+call settings_group
+mov angle_group[rip],rax
 lea rdi,str47[rip]
 call gtk_label_new_with_mnemonic@PLT
 mov temp[rip],rax
@@ -351,7 +227,7 @@ call gtk_label_set_xalign@PLT
 mov rdi,grid[rip]
 mov rsi,temp[rip]
 xor edx,edx
-mov ecx,7
+mov ecx,0
 mov r8d,1
 mov r9d,1
 call gtk_grid_attach@PLT
@@ -372,7 +248,7 @@ call gtk_label_set_mnemonic_widget@PLT
 mov rdi,grid[rip]
 mov rsi,spins+56[rip]
 mov edx,1
-mov ecx,7
+mov ecx,0
 mov r8d,1
 mov r9d,1
 call gtk_grid_attach@PLT
@@ -385,7 +261,7 @@ call gtk_label_set_xalign@PLT
 mov rdi,grid[rip]
 mov rsi,temp[rip]
 xor edx,edx
-mov ecx,8
+mov ecx,1
 mov r8d,1
 mov r9d,1
 call gtk_grid_attach@PLT
@@ -406,7 +282,7 @@ call gtk_label_set_mnemonic_widget@PLT
 mov rdi,grid[rip]
 mov rsi,spins+64[rip]
 mov edx,1
-mov ecx,8
+mov ecx,1
 mov r8d,1
 mov r9d,1
 call gtk_grid_attach@PLT
@@ -419,7 +295,7 @@ call gtk_label_set_xalign@PLT
 mov rdi,grid[rip]
 mov rsi,temp[rip]
 xor edx,edx
-mov ecx,9
+mov ecx,2
 mov r8d,1
 mov r9d,1
 call gtk_grid_attach@PLT
@@ -440,10 +316,167 @@ call gtk_label_set_mnemonic_widget@PLT
 mov rdi,grid[rip]
 mov rsi,spins+72[rip]
 mov edx,1
-mov ecx,9
+mov ecx,2
 mov r8d,1
 mov r9d,1
 call gtk_grid_attach@PLT
+lea rdi,bone_title[rip]
+mov esi,0
+call settings_group
+mov bone_group[rip],rax
+lea rdi,str23[rip]
+call gtk_label_new_with_mnemonic@PLT
+mov temp[rip],rax
+mov rdi,rax
+movsd xmm0,dbl24[rip]
+call gtk_label_set_xalign@PLT
+mov rdi,grid[rip]
+mov rsi,temp[rip]
+xor edx,edx
+mov ecx,0
+mov r8d,1
+mov r9d,1
+call gtk_grid_attach@PLT
+movsd xmm0,dbl25[rip]
+movsd xmm1,dbl26[rip]
+movsd xmm2,dbl27[rip]
+call gtk_spin_button_new_with_range@PLT
+mov spins+24[rip],rax
+mov rdi,rax
+mov esi,2
+call gtk_spin_button_set_digits@PLT
+mov rdi,spins+24[rip]
+movsd xmm0,dbl28[rip]
+call gtk_spin_button_set_value@PLT
+mov rdi,temp[rip]
+mov rsi,spins+24[rip]
+call gtk_label_set_mnemonic_widget@PLT
+mov rdi,grid[rip]
+mov rsi,spins+24[rip]
+mov edx,1
+mov ecx,0
+mov r8d,1
+mov r9d,1
+call gtk_grid_attach@PLT
+lea rdi,str29[rip]
+call gtk_label_new_with_mnemonic@PLT
+mov temp[rip],rax
+mov rdi,rax
+movsd xmm0,dbl30[rip]
+call gtk_label_set_xalign@PLT
+mov rdi,grid[rip]
+mov rsi,temp[rip]
+xor edx,edx
+mov ecx,1
+mov r8d,1
+mov r9d,1
+call gtk_grid_attach@PLT
+movsd xmm0,dbl31[rip]
+movsd xmm1,dbl32[rip]
+movsd xmm2,dbl33[rip]
+call gtk_spin_button_new_with_range@PLT
+mov spins+32[rip],rax
+mov rdi,rax
+mov esi,2
+call gtk_spin_button_set_digits@PLT
+mov rdi,spins+32[rip]
+movsd xmm0,dbl34[rip]
+call gtk_spin_button_set_value@PLT
+mov rdi,temp[rip]
+mov rsi,spins+32[rip]
+call gtk_label_set_mnemonic_widget@PLT
+mov rdi,grid[rip]
+mov rsi,spins+32[rip]
+mov edx,1
+mov ecx,1
+mov r8d,1
+mov r9d,1
+call gtk_grid_attach@PLT
+lea rdi,limit_title[rip]
+mov esi,0
+call settings_group
+mov limit_group[rip],rax
+lea rdi,str35[rip]
+call gtk_label_new_with_mnemonic@PLT
+mov temp[rip],rax
+mov rdi,rax
+movsd xmm0,dbl36[rip]
+call gtk_label_set_xalign@PLT
+mov rdi,grid[rip]
+mov rsi,temp[rip]
+xor edx,edx
+mov ecx,0
+mov r8d,1
+mov r9d,1
+call gtk_grid_attach@PLT
+movsd xmm0,dbl37[rip]
+movsd xmm1,dbl38[rip]
+movsd xmm2,dbl39[rip]
+call gtk_spin_button_new_with_range@PLT
+mov spins+40[rip],rax
+mov rdi,rax
+mov esi,2
+call gtk_spin_button_set_digits@PLT
+mov rdi,spins+40[rip]
+movsd xmm0,dbl40[rip]
+call gtk_spin_button_set_value@PLT
+mov rdi,temp[rip]
+mov rsi,spins+40[rip]
+call gtk_label_set_mnemonic_widget@PLT
+mov rdi,grid[rip]
+mov rsi,spins+40[rip]
+mov edx,1
+mov ecx,0
+mov r8d,1
+mov r9d,1
+call gtk_grid_attach@PLT
+lea rdi,str41[rip]
+call gtk_label_new_with_mnemonic@PLT
+mov temp[rip],rax
+mov rdi,rax
+movsd xmm0,dbl42[rip]
+call gtk_label_set_xalign@PLT
+mov rdi,grid[rip]
+mov rsi,temp[rip]
+xor edx,edx
+mov ecx,1
+mov r8d,1
+mov r9d,1
+call gtk_grid_attach@PLT
+movsd xmm0,dbl43[rip]
+movsd xmm1,dbl44[rip]
+movsd xmm2,dbl45[rip]
+call gtk_spin_button_new_with_range@PLT
+mov spins+48[rip],rax
+mov rdi,rax
+mov esi,2
+call gtk_spin_button_set_digits@PLT
+mov rdi,spins+48[rip]
+movsd xmm0,dbl46[rip]
+call gtk_spin_button_set_value@PLT
+mov rdi,temp[rip]
+mov rsi,spins+48[rip]
+call gtk_label_set_mnemonic_widget@PLT
+mov rdi,grid[rip]
+mov rsi,spins+48[rip]
+mov edx,1
+mov ecx,1
+mov r8d,1
+mov r9d,1
+call gtk_grid_attach@PLT
+lea rdi,str4[rip]
+call gtk_check_button_new_with_label@PLT
+mov branch[rip],rax
+mov rsi,rax
+mov rdi,controls[rip]
+mov edx,0
+mov ecx,0
+xor r8d,r8d
+call gtk_box_pack_start@PLT
+lea rdi,camera_title[rip]
+mov esi,1
+call settings_group
+mov camera_group[rip],rax
 lea rdi,str65[rip]
 call gtk_label_new_with_mnemonic@PLT
 mov temp[rip],rax
@@ -453,7 +486,7 @@ call gtk_label_set_xalign@PLT
 mov rdi,grid[rip]
 mov rsi,temp[rip]
 xor edx,edx
-mov ecx,10
+mov ecx,0
 mov r8d,1
 mov r9d,1
 call gtk_grid_attach@PLT
@@ -474,7 +507,7 @@ call gtk_label_set_mnemonic_widget@PLT
 mov rdi,grid[rip]
 mov rsi,spins+80[rip]
 mov edx,1
-mov ecx,10
+mov ecx,0
 mov r8d,1
 mov r9d,1
 call gtk_grid_attach@PLT
@@ -487,7 +520,7 @@ call gtk_label_set_xalign@PLT
 mov rdi,grid[rip]
 mov rsi,temp[rip]
 xor edx,edx
-mov ecx,11
+mov ecx,1
 mov r8d,1
 mov r9d,1
 call gtk_grid_attach@PLT
@@ -508,7 +541,7 @@ call gtk_label_set_mnemonic_widget@PLT
 mov rdi,grid[rip]
 mov rsi,spins+88[rip]
 mov edx,1
-mov ecx,11
+mov ecx,1
 mov r8d,1
 mov r9d,1
 call gtk_grid_attach@PLT
@@ -521,7 +554,7 @@ call gtk_label_set_xalign@PLT
 mov rdi,grid[rip]
 mov rsi,temp[rip]
 xor edx,edx
-mov ecx,12
+mov ecx,2
 mov r8d,1
 mov r9d,1
 call gtk_grid_attach@PLT
@@ -542,7 +575,7 @@ call gtk_label_set_mnemonic_widget@PLT
 mov rdi,grid[rip]
 mov rsi,spins+96[rip]
 mov edx,1
-mov ecx,12
+mov ecx,2
 mov r8d,1
 mov r9d,1
 call gtk_grid_attach@PLT
@@ -564,27 +597,38 @@ mov edx,1
 mov ecx,1
 xor r8d,r8d
 call gtk_box_pack_start@PLT
-lea rdi,ready_status[rip]
-call gtk_label_new@PLT
-mov status[rip],rax
+xor edi,edi
+mov esi,8
+call gtk_box_new@PLT
+mov view_toolbar[rip],rax
 mov rsi,rax
 mov rdi,right[rip]
 xor edx,edx
 xor ecx,ecx
 xor r8d,r8d
 call gtk_box_pack_start@PLT
-call gtk_drawing_area_new@PLT
-mov canvas[rip],rax
-mov rdi,rax
-mov esi,500
-mov edx,330
-call gtk_widget_set_size_request@PLT
-mov rsi,canvas[rip]
-mov rdi,right[rip]
+lea rdi,ready_status[rip]
+call gtk_label_new@PLT
+mov status[rip],rax
+mov rsi,rax
+mov rdi,view_toolbar[rip]
 mov edx,1
 mov ecx,1
 xor r8d,r8d
 call gtk_box_pack_start@PLT
+call gtk_drawing_area_new@PLT
+mov canvas[rip],rax
+mov rdi,rax
+mov esi,380
+mov edx,230
+call gtk_widget_set_size_request@PLT
+mov rsi,canvas[rip]
+mov rdi,right[rip]
+xor edx,edx
+xor ecx,ecx
+xor r8d,r8d
+call gtk_box_pack_start@PLT
+call camera_setup
 lea rdi,str84[rip]
 call gtk_label_new@PLT
 mov rsi,rax
@@ -615,7 +659,7 @@ call math_panel_new
 mov scroll[rip],rax
 mov rdi,rax
 mov esi,-1
-mov edx,300
+mov edx,260
 call gtk_widget_set_size_request@PLT
 mov rsi,scroll[rip]
 mov rdi,right[rip]
@@ -716,21 +760,21 @@ xor r9d,r9d
 call g_signal_connect_data@PLT
 mov rdi,spins+80[rip]
 lea rsi,str98[rip]
-lea rdx,update[rip]
+lea rdx,camera_changed[rip]
 xor ecx,ecx
 xor r8d,r8d
 xor r9d,r9d
 call g_signal_connect_data@PLT
 mov rdi,spins+88[rip]
 lea rsi,str99[rip]
-lea rdx,update[rip]
+lea rdx,camera_changed[rip]
 xor ecx,ecx
 xor r8d,r8d
 xor r9d,r9d
 call g_signal_connect_data@PLT
 mov rdi,spins+96[rip]
 lea rsi,str100[rip]
-lea rdx,update[rip]
+lea rdx,camera_changed[rip]
 xor ecx,ecx
 xor r8d,r8d
 xor r9d,r9d
@@ -759,7 +803,14 @@ no_display:
  END
 
 FN quit
+mov rdi,orbit_gesture[rip]
+call g_object_unref@PLT
+mov QWORD PTR orbit_gesture[rip],0
+call gtk_main_level@PLT
+test eax,eax
+jz .quit_done
 call gtk_main_quit@PLT
+.quit_done:
 END
 FN update
 mov rdi,spins+0[rip]
@@ -831,7 +882,7 @@ movsd xmm0,dbl103[rip]
 branch_done:
 movsd inputs+56[rip],xmm0
 mov rdi,mode[rip]
-call gtk_toggle_button_get_active@PLT
+call gtk_combo_box_get_active@PLT
 mov is_fk[rip],eax
 test eax,eax
 jz solve_ik
@@ -854,6 +905,13 @@ lea rsi,out[rip]
 call ik_solve
 solved:
 mov valid[rip],eax
+mov rdi,target_group[rip]
+mov esi,is_fk[rip]
+xor esi,1
+call gtk_widget_set_visible@PLT
+mov rdi,angle_group[rip]
+mov esi,is_fk[rip]
+call gtk_widget_set_visible@PLT
 mov rdi,spins+0[rip]
 mov esi,is_fk[rip]
 xor esi,1
@@ -1385,6 +1443,9 @@ ui_drain:
  cmp DWORD PTR [rbp-4],50
  jl ui_drain
 
+call interaction_check
+test eax,eax
+jz ui_failed
 cmp DWORD PTR valid[rip],1
 jne ui_failed
 mov edi,is_fk[rip]
@@ -1464,7 +1525,7 @@ mov rdi,[rbp-16]
 call cairo_surface_destroy@PLT
 mov rdi,mode[rip]
 mov esi,1
-call gtk_toggle_button_set_active@PLT
+call gtk_combo_box_set_active@PLT
 mov rdi,spins+56[rip]
 movsd xmm0,dbl215[rip]
 call gtk_spin_button_set_value@PLT
@@ -1612,9 +1673,9 @@ axisy: .double 0,3,0
 axisz: .double 0,0,3
 str0: .asciz "Bone Lab • Assembly IK + FK"
 str1: .asciz "BONE LAB     /     Assembly kinematics"
-str2: .asciz "Two rigid bones • Z up • arbitrary length units • unrestricted shoulder • elbow limits • position only"
+str2: .asciz "Two-bone IK / FK • Z up • lengths in consistent units • angles in degrees"
 str3: .asciz "Forward kinematics (angles → bones)"
-str4: .asciz "Reverse elbow branch"
+str4: .asciz "Bend the elbow the other way"
 str5: .asciz "Target _X"
 dbl6: .double 0
 dbl7: .double -20
@@ -1693,10 +1754,10 @@ dbl79: .double 0.3
 dbl80: .double 3
 dbl81: .double 0.05
 dbl82: .double 1
-str83: .asciz "IK uses target X/Y/Z. FK uses angles.\nAngles shown in degrees; math uses radians.\nOrbit with camera controls. No animation lag."
-str84: .asciz "Blue: upper bone  •  Teal: lower bone  •  Red ring: IK target  •  Gray line: residual\nOrthographic 3D view — use camera azimuth and elevation to inspect depth."
+str83: .asciz "0° = straight • 180° = folded\nChanges update the pose immediately."
+str84: .asciz "Hold middle mouse + drag to orbit • Blue / teal: bones • Red ring: target"
 str85: .asciz "draw"
-str86: .asciz "toggled"
+str86: .asciz "changed"
 str87: .asciz "toggled"
 str88: .asciz "value-changed"
 str89: .asciz "value-changed"
@@ -1832,7 +1893,7 @@ str218: .asciz "evidence/fk.png"
 dbl219: .double 100
 dbl220: .double 20
 str221: .asciz "evidence/invalid.png"
-str222: .asciz "PASS: offscreen GTK controls, IK/FK mode, unreachable and invalid states; six PNGs; typeset labels, accessible names and transcript tab"
+str222: .asciz "PASS: compact layout, MMB gesture mapping/orbit/release/cancel/reset, repeated mode switches; offscreen GTK controls, IK/FK mode, unreachable and invalid states; six PNGs; typeset labels, accessible names and transcript tab"
 .bss
 .align 8
 win: .skip 8
@@ -1861,7 +1922,7 @@ is_fk: .skip 8
 .section .note.GNU-stack,"",@progbits
 
 .section .rodata
-css: .asciz "* { font-family: sans-serif; font-size: 14px; } window, box, grid, label { background-color: #f5f7fb; color: #192840; } textview text { background-color: #ffffff; color: #192840; } textview { font-family: monospace; font-size: 13px; } spinbutton, spinbutton entry { background: #ffffff; color: #192840; } notebook, notebook header, notebook tab { background: #e8edf5; color: #192840; } notebook tab:checked { background: #ffffff; border-bottom: 2px solid #2454a4; } spinbutton:disabled, spinbutton entry:disabled { color: #677385; background: #e8edf4; }"
+css: .asciz "* { font-family: sans-serif; font-size: 13px; } window, box, grid, label { background-color: #f5f7fb; color: #192840; } textview text { background-color: #ffffff; color: #192840; } textview { font-family: monospace; font-size: 12px; } spinbutton, spinbutton entry { background: #ffffff; color: #192840; } button, combobox button { background: #ffffff; color: #192840; border: 1px solid #b5c2d5; border-radius: 4px; box-shadow: none; padding: 5px 8px; } button:hover { background: #e8eef8; } button:focus { border-color: #2454a4; } notebook, notebook header, notebook tab { background: #e8edf5; color: #192840; } notebook tab:checked { background: #ffffff; border-bottom: 2px solid #2454a4; } spinbutton:disabled, spinbutton entry:disabled { color: #677385; background: #e8edf4; }"
 
 .section .rodata
 ready_status: .asciz "Ready"
@@ -1889,3 +1950,366 @@ test_camera: .double 35
 .section .rodata
 typeset_ik: .asciz "evidence/typeset-ik.png"
 typeset_fk: .asciz "evidence/typeset-fk.png"
+
+.text
+# settings_group(title, is_expander): returns group; publishes its field grid.
+FN settings_group
+mov [rbp-8],rdi
+test esi,esi
+jz .group_frame
+call gtk_expander_new@PLT
+jmp .group_ready
+.group_frame:
+call gtk_frame_new@PLT
+.group_ready:
+mov [rbp-16],rax
+mov rsi,rax
+mov rdi,controls[rip]
+xor edx,edx
+xor ecx,ecx
+xor r8d,r8d
+call gtk_box_pack_start@PLT
+call gtk_grid_new@PLT
+mov grid[rip],rax
+mov rsi,rax
+mov rdi,[rbp-16]
+call gtk_container_add@PLT
+mov rdi,grid[rip]
+mov esi,8
+call gtk_container_set_border_width@PLT
+mov rdi,grid[rip]
+mov esi,5
+call gtk_grid_set_row_spacing@PLT
+mov rdi,grid[rip]
+mov esi,8
+call gtk_grid_set_column_spacing@PLT
+mov rax,[rbp-16]
+END
+# Native GTK gesture tracks only button 2 and owns pointer sequences, including
+# release/cancellation outside the drawing area. No raw GDK struct offsets.
+FN camera_setup
+mov rdi,canvas[rip]
+lea rsi,orbit_help[rip]
+call gtk_widget_set_tooltip_text@PLT
+mov rdi,canvas[rip]
+call gtk_gesture_drag_new@PLT
+mov orbit_gesture[rip],rax
+mov rdi,rax
+mov esi,2
+call gtk_gesture_single_set_button@PLT
+mov rdi,orbit_gesture[rip]
+lea rsi,drag_begin_signal[rip]
+lea rdx,orbit_begin[rip]
+xor ecx,ecx
+xor r8d,r8d
+xor r9d,r9d
+call g_signal_connect_data@PLT
+mov rdi,orbit_gesture[rip]
+lea rsi,drag_update_signal[rip]
+lea rdx,orbit_update[rip]
+xor ecx,ecx
+xor r8d,r8d
+xor r9d,r9d
+call g_signal_connect_data@PLT
+mov rdi,orbit_gesture[rip]
+lea rsi,drag_end_signal[rip]
+lea rdx,orbit_end[rip]
+xor ecx,ecx
+xor r8d,r8d
+xor r9d,r9d
+call g_signal_connect_data@PLT
+mov rdi,orbit_gesture[rip]
+lea rsi,cancel_signal[rip]
+lea rdx,orbit_end[rip]
+xor ecx,ecx
+xor r8d,r8d
+xor r9d,r9d
+call g_signal_connect_data@PLT
+lea rdi,reset_label[rip]
+call gtk_button_new_with_label@PLT
+mov reset_button[rip],rax
+mov rsi,rax
+mov rdi,view_toolbar[rip]
+xor edx,edx
+xor ecx,ecx
+xor r8d,r8d
+call gtk_box_pack_start@PLT
+mov rdi,reset_button[rip]
+lea rsi,clicked_signal[rip]
+lea rdx,reset_camera[rip]
+xor ecx,ecx
+xor r8d,r8d
+xor r9d,r9d
+call g_signal_connect_data@PLT
+END
+FN orbit_begin
+mov rdi,spins+80[rip]
+call gtk_spin_button_get_value@PLT
+movsd orbit_start[rip],xmm0
+mov rdi,spins+88[rip]
+call gtk_spin_button_get_value@PLT
+movsd orbit_start+8[rip],xmm0
+mov DWORD PTR orbit_active[rip],1
+END
+FN orbit_update
+cmp DWORD PTR orbit_active[rip],1
+jne .orbit_done
+movsd [rbp-8],xmm1
+# Wrap horizontal movement, rather than sticking at either end of the range.
+mulsd xmm0,orbit_speed[rip]
+addsd xmm0,orbit_start[rip]
+addsd xmm0,dbl68[rip]
+movsd xmm1,full_circle[rip]
+call fmod@PLT
+pxor xmm1,xmm1
+comisd xmm0,xmm1
+jae .wrapped
+addsd xmm0,full_circle[rip]
+.wrapped:
+subsd xmm0,dbl68[rip]
+mov rdi,spins+80[rip]
+call gtk_spin_button_set_value@PLT
+movsd xmm1,[rbp-8]
+mulsd xmm1,orbit_speed[rip]
+movsd xmm0,orbit_start+8[rip]
+subsd xmm0,xmm1
+maxsd xmm0,dbl73[rip]
+minsd xmm0,dbl74[rip]
+mov rdi,spins+88[rip]
+call gtk_spin_button_set_value@PLT
+.orbit_done:
+END
+FN orbit_end
+mov DWORD PTR orbit_active[rip],0
+END
+FN reset_camera
+call orbit_end
+mov rdi,spins+80[rip]
+movsd xmm0,dbl70[rip]
+call gtk_spin_button_set_value@PLT
+mov rdi,spins+88[rip]
+movsd xmm0,dbl76[rip]
+call gtk_spin_button_set_value@PLT
+mov rdi,spins+96[rip]
+movsd xmm0,dbl82[rip]
+call gtk_spin_button_set_value@PLT
+END
+.section .rodata
+ik_mode: .asciz "IK — move the target"
+fk_mode: .asciz "FK — set joint angles"
+mode_help: .asciz "IK solves joint angles for a target position. FK calculates a position from angles. Each mode retains its inputs."
+target_title: .asciz "Target position"
+angle_title: .asciz "Joint angles (degrees)"
+bone_title: .asciz "Bone lengths"
+limit_title: .asciz "Elbow limits (degrees)"
+camera_title: .asciz "Camera / zoom controls"
+orbit_help: .asciz "Hold the middle mouse button and move to orbit the 3D camera. Camera / zoom controls provide a keyboard alternative."
+reset_label: .asciz "Reset view"
+drag_begin_signal: .asciz "drag-begin"
+drag_update_signal: .asciz "drag-update"
+drag_end_signal: .asciz "drag-end"
+cancel_signal: .asciz "cancel"
+clicked_signal: .asciz "clicked"
+orbit_speed: .double 0.4
+full_circle: .double 360
+.bss
+.align 8
+sidebar: .skip 8
+view_toolbar: .skip 8
+target_group: .skip 8
+angle_group: .skip 8
+bone_group: .skip 8
+limit_group: .skip 8
+camera_group: .skip 8
+orbit_gesture: .skip 8
+orbit_active: .skip 8
+orbit_start: .skip 16
+reset_button: .skip 8
+
+#ifdef UI_TEST
+.text
+# Drive native gesture/control signals without a physical pointer or visible window.
+FN interaction_check
+mov rdi,orbit_gesture[rip]
+call gtk_gesture_single_get_button@PLT
+cmp eax,2
+jne .interaction_bad
+mov rdi,camera_group[rip]
+call gtk_expander_get_expanded@PLT
+test eax,eax
+jnz .interaction_bad
+mov rdi,target_group[rip]
+call gtk_widget_get_visible@PLT
+cmp eax,1
+jne .interaction_bad
+mov rdi,angle_group[rip]
+call gtk_widget_get_visible@PLT
+test eax,eax
+jnz .interaction_bad
+mov rdi,canvas[rip]
+call gtk_widget_get_allocated_height@PLT
+cmp eax,230
+jne .interaction_bad
+lea rdi,test_pose[rip]
+lea rsi,out[rip]
+mov edx,OUTSIZE
+call memcpy@PLT
+call test_begin
+mov rdi,orbit_gesture[rip]
+lea rsi,drag_update_signal[rip]
+movsd xmm0,test_dx[rip]
+movsd xmm1,test_dy[rip]
+mov eax,2
+call g_signal_emit_by_name@PLT
+movsd xmm0,values+80[rip]
+ucomisd xmm0,test_azimuth[rip]
+jne .interaction_bad
+movsd xmm0,values+88[rip]
+ucomisd xmm0,test_elevation[rip]
+jne .interaction_bad
+lea rdi,test_pose[rip]
+lea rsi,out[rip]
+mov edx,OUTSIZE
+call memcmp@PLT
+test eax,eax
+jnz .interaction_bad
+mov rdi,orbit_gesture[rip]
+lea rsi,drag_end_signal[rip]
+pxor xmm0,xmm0
+pxor xmm1,xmm1
+mov eax,2
+call g_signal_emit_by_name@PLT
+cmp DWORD PTR orbit_active[rip],0
+jne .interaction_bad
+# Motion after release cannot keep rotating.
+mov rdi,orbit_gesture[rip]
+lea rsi,drag_update_signal[rip]
+movsd xmm0,test_far[rip]
+movsd xmm1,test_far[rip]
+mov eax,2
+call g_signal_emit_by_name@PLT
+movsd xmm0,values+80[rip]
+ucomisd xmm0,test_azimuth[rip]
+jne .interaction_bad
+# New gestures start from the current view, not the first view.
+call test_begin
+mov rdi,orbit_gesture[rip]
+lea rsi,drag_update_signal[rip]
+movsd xmm0,test_far[rip]
+movsd xmm1,test_far[rip]
+mov eax,2
+call g_signal_emit_by_name@PLT
+movsd xmm0,values+80[rip]
+ucomisd xmm0,test_wrapped[rip]
+jne .interaction_bad
+movsd xmm0,values+88[rip]
+ucomisd xmm0,dbl73[rip]
+jne .interaction_bad
+mov rdi,orbit_gesture[rip]
+lea rsi,cancel_signal[rip]
+xor edx,edx
+xor eax,eax
+call g_signal_emit_by_name@PLT
+cmp DWORD PTR orbit_active[rip],0
+jne .interaction_bad
+# Reset is signal-driven and restores all camera settings, not the pose inputs.
+mov rdi,reset_button[rip]
+lea rsi,clicked_signal[rip]
+xor eax,eax
+call g_signal_emit_by_name@PLT
+movsd xmm0,values+80[rip]
+ucomisd xmm0,dbl70[rip]
+jne .interaction_bad
+movsd xmm0,values+88[rip]
+ucomisd xmm0,dbl76[rip]
+jne .interaction_bad
+movsd xmm0,values+96[rip]
+ucomisd xmm0,dbl82[rip]
+jne .interaction_bad
+# Expand/collapse keyboard camera controls; keep the compact default.
+mov rdi,camera_group[rip]
+mov esi,1
+call gtk_expander_set_expanded@PLT
+mov rdi,camera_group[rip]
+call gtk_expander_get_expanded@PLT
+cmp eax,1
+jne .interaction_bad
+mov rdi,camera_group[rip]
+xor esi,esi
+call gtk_expander_set_expanded@PLT
+mov DWORD PTR [rbp-4],3
+.mode_repeat:
+mov rdi,mode[rip]
+mov esi,1
+call gtk_combo_box_set_active@PLT
+mov rdi,target_group[rip]
+call gtk_widget_get_visible@PLT
+test eax,eax
+jnz .interaction_bad
+mov rdi,angle_group[rip]
+call gtk_widget_get_visible@PLT
+cmp eax,1
+jne .interaction_bad
+mov rdi,mode[rip]
+xor esi,esi
+call gtk_combo_box_set_active@PLT
+mov rdi,target_group[rip]
+call gtk_widget_get_visible@PLT
+cmp eax,1
+jne .interaction_bad
+mov rdi,angle_group[rip]
+call gtk_widget_get_visible@PLT
+test eax,eax
+jnz .interaction_bad
+dec DWORD PTR [rbp-4]
+jnz .mode_repeat
+lea rdi,test_pose[rip]
+lea rsi,out[rip]
+mov edx,OUTSIZE
+call memcmp@PLT
+test eax,eax
+jnz .interaction_bad
+mov eax,1
+END
+.interaction_bad:
+xor eax,eax
+END
+FN test_begin
+mov rdi,orbit_gesture[rip]
+lea rsi,drag_begin_signal[rip]
+pxor xmm0,xmm0
+pxor xmm1,xmm1
+mov eax,2
+call g_signal_emit_by_name@PLT
+END
+.section .rodata
+test_dx: .double 100
+test_dy: .double 50
+test_azimuth: .double -5
+test_elevation: .double 5
+test_far: .double 2000
+test_wrapped: .double 75
+.bss
+.align 8
+test_pose: .skip OUTSIZE
+#endif
+
+.text
+# View-only input avoids rerunning kinematics or regenerating the worksheet.
+FN camera_changed
+mov rdi,spins+80[rip]
+call gtk_spin_button_get_value@PLT
+movsd values+80[rip],xmm0
+mulsd xmm0,radians[rip]
+movsd camera[rip],xmm0
+mov rdi,spins+88[rip]
+call gtk_spin_button_get_value@PLT
+movsd values+88[rip],xmm0
+mulsd xmm0,radians[rip]
+movsd camera+8[rip],xmm0
+mov rdi,spins+96[rip]
+call gtk_spin_button_get_value@PLT
+movsd values+96[rip],xmm0
+mov rdi,canvas[rip]
+call gtk_widget_queue_draw@PLT
+END

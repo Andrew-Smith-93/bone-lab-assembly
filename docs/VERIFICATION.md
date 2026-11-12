@@ -49,3 +49,43 @@ monitor inspection and very large font overrides remain unverified.
 
 Isolated installer tests pass initial/repeat install, explicit upgrade, preservation
 of the old binary, version reactivation, uninstall and changed-file/symlink refusal.
+
+## Compact controls and middle-mouse orbit
+
+The updated view is 230 logical pixels tall, with Results below it and grouped
+settings beside it. Requested normal/narrow sizes are 1120×760 and 1024×720;
+offscreen window captures use GTK's actual allocation (1120×656 and 1024×656).
+All pose-summary values and the tab hint fit without scrolling. Full derivations
+remain scrollable by design; font size is reduced from 13000 to 11000 Pango units.
+The settings sidebar can scroll separately on shorter windows or when Camera is
+expanded. A scale-2 GTK layout run passes; captured PNGs use logical pixels.
+
+Passed against the final code:
+
+- The unchanged 6,144 IK/FK cases, 1,000 projection cases and numerical regressions.
+- Fatal-warning GTK fixtures at normal, narrow and scale-2 sizes, with actual
+  canvas-height assertions, mode-specific field visibility and repeated IK/FK
+  switches preserving the retained inputs and computed pose.
+- Gesture signals assert button-2 configuration, azimuth wrap, elevation clamp,
+  release, cancellation and Reset view. Camera changes leave solver output intact
+  and no longer rebuild the mathematical worksheet on each mouse movement.
+- Synthetic GDK press/motion/release events delivered through the real offscreen
+  GTK canvas verify left-button rejection, held middle-button rotation, movement
+  outside canvas bounds, release stopping further rotation and repeated drags.
+  This exercises GTK gesture event delivery, not just direct callback invocation.
+- Results scroll bounds and compact window bounds, the full plaintext buffer,
+  three mathematical tabs, camera reset and clean window/gesture teardown.
+- Installer lifecycle, upgrade, preservation of the old binary and rollback.
+
+No physical pointer movement or visible window was used. Physical-monitor input,
+OS-level pointer-grab delivery and a screen-reader session remain unverified.
+The event test explicitly delivers out-of-bounds coordinates to the widget; it
+is not evidence of hardware/OS event delivery outside the application window.
+Runtime remains native assembly with the existing system GTK/Cairo dependencies.
+
+
+Independent review found no blocking security, assembly ABI or mathematical
+preservation defect. Its minor gesture-ownership and redundant redraw findings
+were corrected, and the final changes were reviewed again. Staged source and
+documentation passed scoped credential/private-path scans; PNGs contain no text
+or EXIF metadata. PIE, full RELRO, immediate binding and nonexecutable stack remain.

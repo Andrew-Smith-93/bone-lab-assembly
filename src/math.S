@@ -26,6 +26,7 @@ FN math_panel_new
 mov [rbp-8],rdi
 call gtk_notebook_new@PLT
 mov m_book[rip],rax
+call summary_new
 xor edi,edi
 xor esi,esi
 call gtk_scrolled_window_new@PLT
@@ -36,7 +37,7 @@ mov esi,8
 call gtk_box_new@PLT
 mov m_body[rip],rax
 mov rdi,m_body[rip]
-mov esi,18
+mov esi,12
 call gtk_container_set_border_width@PLT
 mov rdi,m_scroll[rip]
 mov rsi,m_body[rip]
@@ -84,7 +85,7 @@ xor ecx,ecx
 xor r8d,r8d
 call gtk_box_pack_start@PLT
 mov edi,1
-mov esi,12
+mov esi,6
 call gtk_box_new@PLT
 mov m_valid[rip],rax
 mov rsi,rax
@@ -94,7 +95,7 @@ xor ecx,ecx
 xor r8d,r8d
 call gtk_box_pack_start@PLT
 mov edi,1
-mov esi,12
+mov esi,6
 call gtk_box_new@PLT
 mov m_ik[rip],rax
 mov rsi,rax
@@ -163,7 +164,7 @@ xor ecx,ecx
 xor r8d,r8d
 call gtk_box_pack_start@PLT
 mov edi,0
-mov esi,12
+mov esi,6
 call gtk_box_new@PLT
 mov m_row[rip],rax
 mov rsi,rax
@@ -215,7 +216,7 @@ xor ecx,ecx
 xor r8d,r8d
 call gtk_box_pack_start@PLT
 mov edi,0
-mov esi,12
+mov esi,6
 call gtk_box_new@PLT
 mov m_row[rip],rax
 mov rsi,rax
@@ -380,7 +381,7 @@ xor ecx,ecx
 xor r8d,r8d
 call gtk_box_pack_start@PLT
 mov edi,1
-mov esi,12
+mov esi,6
 call gtk_box_new@PLT
 mov m_fk[rip],rax
 mov rsi,rax
@@ -584,6 +585,7 @@ mov r12,rdi
 mov r13,rsi
 mov r14d,edx
 mov r15d,ecx
+call summary_update
 mov rdi,m_body[rip]
 call gtk_widget_show_all@PLT
 mov rdi,m_invalid[rip]
@@ -978,78 +980,78 @@ END
 .balign 16
 m_abs: .quad 0x7fffffffffffffff,0x7fffffffffffffff
 mt0: .asciz "MATHEMATICAL WORKING"
-mt1: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">ψ: yaw    θ: shoulder pitch    φ: elbow flexion\nσ ∈ {−1, +1}: bend sign • angles in radians</span>"
+mt1: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">ψ: yaw    θ: shoulder pitch    φ: elbow flexion\nσ ∈ {−1, +1}: bend sign • angles in radians</span>"
 mt2: .asciz "Displayed decimals are rounded; calculations use full precision. Select equations to copy. A linear transcript is available in Plain-text working."
 mt3: .asciz "Invalid constraints or angles. Correct the inputs to calculate a pose."
-mt4: .asciz "<span size=\"12000\" weight=\"bold\" foreground=\"#2454a4\">1  ·  Target and geometry</span>"
-mt5: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt6: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt7: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">ρ = √(x² + y²),    r = √(ρ² + z²)</span>"
-mt8: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt9: .asciz "<span size=\"12000\" weight=\"bold\" foreground=\"#2454a4\">2  ·  Law of cosines</span>"
-mt10: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">For an exact unconstrained target solution:\nr² = L<sub>1</sub>² + L<sub>2</sub>² + 2L<sub>1</sub>L<sub>2</sub> cos φ</span>"
-mt11: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">c =</span>"
-mt12: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">r² − L<sub>1</sub>² − L<sub>2</sub>²</span>"
-mt13: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">2L<sub>1</sub>L<sub>2</sub></span>"
-mt14: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">=</span>"
-mt15: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt16: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt17: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt18: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt19: .asciz "<span size=\"12000\" weight=\"bold\" foreground=\"#2454a4\">3  ·  Stable flexion and constraints</span>"
-mt20: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">d = clamp(r, |L<sub>1</sub> − L<sub>2</sub>|, L<sub>1</sub> + L<sub>2</sub>)\nA = √((L<sub>1</sub> + L<sub>2</sub> − d)(L<sub>1</sub> + L<sub>2</sub> + d))\nB = √((d − |L<sub>1</sub> − L<sub>2</sub>|)(d + |L<sub>1</sub> − L<sub>2</sub>|))</span>"
-mt21: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt22: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">φ<sub>0</sub> = 2 atan2(A, B)\nφ = clamp(φ<sub>0</sub>, φ<sub>min</sub>, φ<sub>max</sub>)</span>"
-mt23: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
+mt4: .asciz "<span size=\"11000\" weight=\"bold\" foreground=\"#2454a4\">1  ·  Target and geometry</span>"
+mt5: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt6: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt7: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">ρ = √(x² + y²),    r = √(ρ² + z²)</span>"
+mt8: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt9: .asciz "<span size=\"11000\" weight=\"bold\" foreground=\"#2454a4\">2  ·  Law of cosines</span>"
+mt10: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">For an exact unconstrained target solution:\nr² = L<sub>1</sub>² + L<sub>2</sub>² + 2L<sub>1</sub>L<sub>2</sub> cos φ</span>"
+mt11: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">c =</span>"
+mt12: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">r² − L<sub>1</sub>² − L<sub>2</sub>²</span>"
+mt13: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">2L<sub>1</sub>L<sub>2</sub></span>"
+mt14: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">=</span>"
+mt15: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt16: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt17: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt18: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt19: .asciz "<span size=\"11000\" weight=\"bold\" foreground=\"#2454a4\">3  ·  Stable flexion and constraints</span>"
+mt20: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">d = clamp(r, |L<sub>1</sub> − L<sub>2</sub>|, L<sub>1</sub> + L<sub>2</sub>)\nA = √((L<sub>1</sub> + L<sub>2</sub> − d)(L<sub>1</sub> + L<sub>2</sub> + d))\nB = √((d − |L<sub>1</sub> − L<sub>2</sub>|)(d + |L<sub>1</sub> − L<sub>2</sub>|))</span>"
+mt21: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt22: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">φ<sub>0</sub> = 2 atan2(A, B)\nφ = clamp(φ<sub>0</sub>, φ<sub>min</sub>, φ<sub>max</sub>)</span>"
+mt23: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
 mt24: .asciz "This half-angle form is equivalent to arccos(c) on the geometric domain, and remains accurate near a folded chain."
-mt25: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt26: .asciz "<span size=\"12000\" weight=\"bold\" foreground=\"#2454a4\">4  ·  Shoulder angles</span>"
-mt27: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">ψ = atan2(y, x),    β = atan2(z, ρ)\nδ = σ atan2(L<sub>2</sub> sin φ, L<sub>1</sub> + L<sub>2</sub> cos φ)\nθ = β + δ</span>"
-mt28: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt29: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt30: .asciz "<span size=\"12000\" weight=\"bold\" foreground=\"#2454a4\">1  ·  Joint-angle inputs</span>"
-mt31: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt32: .asciz "<span size=\"12000\" weight=\"bold\" foreground=\"#2454a4\">Forward reconstruction · shared by IK and FK</span>"
-mt33: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt34: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"><b>R</b><sub>z</sub>(ψ) =\n<span font_family=\"DejaVu Sans Mono\">⎡ cos ψ  −sin ψ  0 ⎤\n⎢ sin ψ   cos ψ  0 ⎥\n⎣   0       0    1 ⎦</span></span>"
-mt35: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"><b>e</b> = <b>R</b><sub>z</sub>(ψ) [L<sub>1</sub> cos θ, 0, L<sub>1</sub> sin θ]<sup>T</sup>\n<b>w</b> = <b>e</b> + <b>R</b><sub>z</sub>(ψ) [L<sub>2</sub> cos q, 0, L<sub>2</sub> sin q]<sup>T</sup></span>"
-mt36: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt37: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt38: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt39: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt40: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt41: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt42: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt43: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
-mt44: .asciz "<span size=\"12000\" weight=\"bold\" foreground=\"#2454a4\">Endpoint verification</span>"
-mt45: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">ε = ‖<b>w</b> − <b>t</b>‖<sub>2</sub>\n= √((w<sub>x</sub> − x)² + (w<sub>y</sub> − y)² + (w<sub>z</sub> − z)²)</span>"
-mt46: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"> </span>"
+mt25: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt26: .asciz "<span size=\"11000\" weight=\"bold\" foreground=\"#2454a4\">4  ·  Shoulder angles</span>"
+mt27: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">ψ = atan2(y, x),    β = atan2(z, ρ)\nδ = σ atan2(L<sub>2</sub> sin φ, L<sub>1</sub> + L<sub>2</sub> cos φ)\nθ = β + δ</span>"
+mt28: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt29: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt30: .asciz "<span size=\"11000\" weight=\"bold\" foreground=\"#2454a4\">1  ·  Joint-angle inputs</span>"
+mt31: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt32: .asciz "<span size=\"11000\" weight=\"bold\" foreground=\"#2454a4\">Forward reconstruction · shared by IK and FK</span>"
+mt33: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt34: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"><b>R</b><sub>z</sub>(ψ) =\n<span font_family=\"DejaVu Sans Mono\">⎡ cos ψ  −sin ψ  0 ⎤\n⎢ sin ψ   cos ψ  0 ⎥\n⎣   0       0    1 ⎦</span></span>"
+mt35: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"><b>e</b> = <b>R</b><sub>z</sub>(ψ) [L<sub>1</sub> cos θ, 0, L<sub>1</sub> sin θ]<sup>T</sup>\n<b>w</b> = <b>e</b> + <b>R</b><sub>z</sub>(ψ) [L<sub>2</sub> cos q, 0, L<sub>2</sub> sin q]<sup>T</sup></span>"
+mt36: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt37: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt38: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt39: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt40: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt41: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt42: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt43: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
+mt44: .asciz "<span size=\"11000\" weight=\"bold\" foreground=\"#2454a4\">Endpoint verification</span>"
+mt45: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">ε = ‖<b>w</b> − <b>t</b>‖<sub>2</sub>\n= √((w<sub>x</sub> − x)² + (w<sub>y</sub> − y)² + (w<sub>z</sub> − z)²)</span>"
+mt46: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"> </span>"
 mt47: .asciz "The result banner and Plain-text working tab describe reachability, precision limits and singular configurations. No iterative convergence is claimed."
-mt48: .asciz "Typeset mathematics"
+mt48: .asciz "Full derivation"
 mt49: .asciz "Plain-text working"
-mt50: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"><b>t</b> = [%.5f, %.5f, %.5f]<sup>T</sup></span>"
-mt51: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">L<sub>1</sub> = %.5f,   L<sub>2</sub> = %.5f</span>"
-mt52: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">ρ = √((%.5f)² + (%.5f)²) = %.8f\nr = √((%.5f)² + (%.5f)²) = %.8f</span>"
-mt53: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">(%.5f)² − (%.5f)² − (%.5f)²</span>"
-mt54: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">2 × %.5f × %.5f</span>"
-mt55: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">= %.8f</span>"
+mt50: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"><b>t</b> = [%.5f, %.5f, %.5f]<sup>T</sup></span>"
+mt51: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">L<sub>1</sub> = %.5f,   L<sub>2</sub> = %.5f</span>"
+mt52: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">ρ = √((%.5f)² + (%.5f)²) = %.8f\nr = √((%.5f)² + (%.5f)²) = %.8f</span>"
+mt53: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">(%.5f)² − (%.5f)² − (%.5f)²</span>"
+mt54: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">2 × %.5f × %.5f</span>"
+mt55: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">= %.8f</span>"
 mt56: .asciz "Raw target cosine before limits.\nNumerator = %.8f; denominator = %.8f"
-mt57: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">d = %.8f,   A = %.8f,   B = %.8f</span>"
-mt58: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">φ<sub>0</sub> = 2 atan2(%.8f, %.8f) = %.8f\nφ = clamp(%.8f, %.8f, %.8f) = %.8f</span>"
-mt59: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">d(φ) = √((L<sub>1</sub> − L<sub>2</sub>)² + 4L<sub>1</sub>L<sub>2</sub> cos²(φ/2))\nd<sub>min</sub> = %.8f,    d<sub>max</sub> = %.8f</span>"
-mt60: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">ψ = atan2(%.5f, %.5f) = %.8f\nβ = atan2(%.5f, %.8f) = %.8f</span>"
-mt61: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">δ = %.0f atan2(%.8f, %.8f) = %.8f\nθ = %.8f + (%.8f) = %.8f</span>"
-mt62: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">ψ = %.8f,   θ = %.8f,   φ = %.8f\nφ<sub>min</sub> = %.8f ≤ φ ≤ %.8f = φ<sub>max</sub></span>"
-mt63: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">q = θ − σφ = %.8f − (%.0f × %.8f) = %.8f</span>"
-mt64: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">cos ψ = %.8f,   sin ψ = %.8f\ncos θ = %.8f,   sin θ = %.8f\ncos q = %.8f,   sin q = %.8f</span>"
-mt65: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">e<sub>x</sub> = L<sub>1</sub> cos θ cos ψ\n= (%.8f) × (%.8f) × (%.8f) = %.8f</span>"
-mt66: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">e<sub>y</sub> = L<sub>1</sub> cos θ sin ψ\n= (%.8f) × (%.8f) × (%.8f) = %.8f</span>"
-mt67: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">e<sub>z</sub> = L<sub>1</sub> sin θ\n= (%.8f) × (%.8f) = %.8f</span>"
-mt68: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">w<sub>x</sub> = e<sub>x</sub> + L<sub>2</sub> cos q cos ψ\n= %.8f + (%.8f) × (%.8f) × (%.8f) = %.8f</span>"
-mt69: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">w<sub>y</sub> = e<sub>y</sub> + L<sub>2</sub> cos q sin ψ\n= %.8f + (%.8f) × (%.8f) × (%.8f) = %.8f</span>"
-mt70: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">w<sub>z</sub> = e<sub>z</sub> + L<sub>2</sub> sin q\n= %.8f + (%.8f) × (%.8f) = %.8f</span>"
-mt71: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\"><b>e</b> = [%.8f, %.8f, %.8f]<sup>T</sup>\n<b>w</b> = [%.8f, %.8f, %.8f]<sup>T</sup></span>"
-mt72: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"13000\">ε = √((%.8f)² + (%.8f)² + (%.8f)²)\n= %.10f length units</span>"
+mt57: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">d = %.8f,   A = %.8f,   B = %.8f</span>"
+mt58: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">φ<sub>0</sub> = 2 atan2(%.8f, %.8f) = %.8f\nφ = clamp(%.8f, %.8f, %.8f) = %.8f</span>"
+mt59: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">d(φ) = √((L<sub>1</sub> − L<sub>2</sub>)² + 4L<sub>1</sub>L<sub>2</sub> cos²(φ/2))\nd<sub>min</sub> = %.8f,    d<sub>max</sub> = %.8f</span>"
+mt60: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">ψ = atan2(%.5f, %.5f) = %.8f\nβ = atan2(%.5f, %.8f) = %.8f</span>"
+mt61: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">δ = %.0f atan2(%.8f, %.8f) = %.8f\nθ = %.8f + (%.8f) = %.8f</span>"
+mt62: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">ψ = %.8f,   θ = %.8f,   φ = %.8f\nφ<sub>min</sub> = %.8f ≤ φ ≤ %.8f = φ<sub>max</sub></span>"
+mt63: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">q = θ − σφ = %.8f − (%.0f × %.8f) = %.8f</span>"
+mt64: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">cos ψ = %.8f,   sin ψ = %.8f\ncos θ = %.8f,   sin θ = %.8f\ncos q = %.8f,   sin q = %.8f</span>"
+mt65: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">e<sub>x</sub> = L<sub>1</sub> cos θ cos ψ\n= (%.8f) × (%.8f) × (%.8f) = %.8f</span>"
+mt66: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">e<sub>y</sub> = L<sub>1</sub> cos θ sin ψ\n= (%.8f) × (%.8f) × (%.8f) = %.8f</span>"
+mt67: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">e<sub>z</sub> = L<sub>1</sub> sin θ\n= (%.8f) × (%.8f) = %.8f</span>"
+mt68: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">w<sub>x</sub> = e<sub>x</sub> + L<sub>2</sub> cos q cos ψ\n= %.8f + (%.8f) × (%.8f) × (%.8f) = %.8f</span>"
+mt69: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">w<sub>y</sub> = e<sub>y</sub> + L<sub>2</sub> cos q sin ψ\n= %.8f + (%.8f) × (%.8f) × (%.8f) = %.8f</span>"
+mt70: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">w<sub>z</sub> = e<sub>z</sub> + L<sub>2</sub> sin q\n= %.8f + (%.8f) × (%.8f) = %.8f</span>"
+mt71: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\"><b>e</b> = [%.8f, %.8f, %.8f]<sup>T</sup>\n<b>w</b> = [%.8f, %.8f, %.8f]<sup>T</sup></span>"
+mt72: .asciz "<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">ε = √((%.8f)² + (%.8f)² + (%.8f)²)\n= %.10f length units</span>"
 .bss
 .align 8
 m_body: .skip 8
@@ -1092,6 +1094,20 @@ md: .skip 112
 # Offscreen evidence only: render the full scrollable equation worksheet.
 FN math_capture
 mov [rbp-8],rdi
+mov rdi,m_book[rip]
+mov esi,1
+call gtk_notebook_set_current_page@PLT
+mov DWORD PTR [rbp-40],0
+.capture_drain:
+xor edi,edi
+call gtk_main_iteration_do@PLT
+inc DWORD PTR [rbp-40]
+cmp DWORD PTR [rbp-40],50
+jl .capture_drain
+mov rdi,m_book[rip]
+call gtk_widget_get_toplevel@PLT
+mov rdi,rax
+call gtk_container_check_resize@PLT
 mov rdi,m_body[rip]
 call gtk_widget_get_allocated_width@PLT
 mov [rbp-12],eax
@@ -1116,6 +1132,9 @@ mov rdi,[rbp-32]
 call cairo_destroy@PLT
 mov rdi,[rbp-24]
 call cairo_surface_destroy@PLT
+mov rdi,m_book[rip]
+xor esi,esi
+call gtk_notebook_set_current_page@PLT
 mov eax,[rbp-36]
 END
 #endif
@@ -1126,7 +1145,7 @@ mov [rbp-4],edi
 mov [rbp-8],esi
 mov rdi,m_book[rip]
 call gtk_notebook_get_n_pages@PLT
-cmp eax,2
+cmp eax,3
 jne .math_bad
 mov rdi,m_valid[rip]
 call gtk_widget_get_visible@PLT
@@ -1160,11 +1179,11 @@ jz .math_bad
 cmp BYTE PTR [rax],0
 je .math_bad
 mov rdi,m_book[rip]
-mov esi,1
+mov esi,2
 call gtk_notebook_set_current_page@PLT
 mov rdi,m_book[rip]
 call gtk_notebook_get_current_page@PLT
-cmp eax,1
+cmp eax,2
 jne .math_bad
 mov rdi,m_book[rip]
 xor esi,esi
@@ -1176,3 +1195,108 @@ END
 xor eax,eax
 END
 #endif
+
+.text
+FN summary_new
+xor edi,edi
+xor esi,esi
+call gtk_scrolled_window_new@PLT
+mov summary_scroll[rip],rax
+mov edi,1
+mov esi,10
+call gtk_box_new@PLT
+mov summary_body[rip],rax
+mov rdi,rax
+mov esi,14
+call gtk_container_set_border_width@PLT
+mov rdi,summary_scroll[rip]
+mov rsi,summary_body[rip]
+call gtk_container_add@PLT
+lea rdi,summary_title[rip]
+call ml_new
+mov summary_result[rip],rax
+mov rsi,rax
+mov rdi,summary_body[rip]
+xor edx,edx
+xor ecx,ecx
+xor r8d,r8d
+call gtk_box_pack_start@PLT
+lea rdi,summary_hint[rip]
+call ml_new
+mov rsi,rax
+mov rdi,summary_body[rip]
+xor edx,edx
+xor ecx,ecx
+xor r8d,r8d
+call gtk_box_pack_start@PLT
+lea rdi,summary_tab[rip]
+call gtk_label_new@PLT
+mov rdx,rax
+mov rdi,m_book[rip]
+mov rsi,summary_scroll[rip]
+call gtk_notebook_append_page@PLT
+END
+# Called with the math updater's r12=input, r13=output, r14=mode, r15=valid.
+FN summary_update
+test r15d,r15d
+jz .summary_invalid
+lea rdi,summary_format[rip]
+movsd xmm0,[r13+YAW]
+divsd xmm0,summary_radians[rip]
+movsd xmm1,[r13+PITCH]
+divsd xmm1,summary_radians[rip]
+movsd xmm2,[r13+PHI]
+divsd xmm2,summary_radians[rip]
+movsd xmm3,[r13+WX]
+movsd xmm4,[r13+WY]
+movsd xmm5,[r13+WZ]
+mov eax,6
+call g_strdup_printf@PLT
+mov [rbp-8],rax
+mov rdi,rax
+call g_string_new@PLT
+mov [rbp-16],rax
+mov rdi,[rbp-8]
+call g_free@PLT
+test r14d,r14d
+jnz .summary_fk
+mov rdi,[rbp-16]
+lea rsi,summary_ik_tail[rip]
+movsd xmm0,[r13+ERROR]
+movsd xmm1,[r13+DMIN]
+movsd xmm2,[r13+DMAX]
+mov eax,3
+call g_string_append_printf@PLT
+jmp .summary_set
+.summary_fk:
+mov rdi,[rbp-16]
+lea rsi,summary_fk_tail[rip]
+call g_string_append@PLT
+.summary_set:
+mov rdi,summary_result[rip]
+mov rax,[rbp-16]
+mov rsi,[rax]
+call gtk_label_set_markup@PLT
+mov rdi,[rbp-16]
+mov esi,1
+call g_string_free@PLT
+END
+.summary_invalid:
+mov rdi,summary_result[rip]
+lea rsi,summary_invalid[rip]
+call gtk_label_set_markup@PLT
+END
+.section .rodata
+summary_tab: .asciz "Results"
+summary_title: .asciz "<b>Pose summary</b>"
+summary_hint: .asciz "Open <b>Full derivation</b> for the equations and substitutions, or <b>Plain-text working</b> to copy the complete calculation."
+summary_format: .asciz "<b>JOINT ANGLES</b>\nYaw  %.2f°    •    Pitch  %.2f°    •    Flexion  %.2f°\n\n<b>ENDPOINT  (x, y, z)</b>\n<span font_family=\"DejaVu Math TeX Gyre\" size=\"11000\">W = [%.5f, %.5f, %.5f]ᵀ</span>\n"
+summary_ik_tail: .asciz "\n<b>TARGET ERROR</b>   %.3g units\nAllowed target distance: %.5f to %.5f units"
+summary_fk_tail: .asciz "\nDirect forward calculation. There is no target residual in FK mode."
+summary_invalid: .asciz "<b>No valid pose</b>\nUse 0° ≤ minimum ≤ maximum ≤ 180°.\nIn FK mode, flexion must be within those limits."
+summary_radians: .double 0.017453292519943295
+.bss
+.align 8
+summary_scroll: .skip 8
+summary_body: .skip 8
+summary_result: .skip 8

@@ -1,10 +1,11 @@
 # Bone Lab — assembly IK + FK
 
 A native Linux x86-64 calculator for **inverse and forward kinematics**, written
-in GNU Intel-syntax assembly. A rotatable orthographic 3D bone view sits beside
-the equations, substituted intermediate values, joint coordinates and residual.
+in GNU Intel-syntax assembly. A compact orthographic 3D bone view and mathematical results are stacked
+vertically beside grouped settings. Hold the middle mouse button and drag to orbit.
 
-The **Typeset mathematics** tab uses native GTK/Pango labels with Greek symbols,
+The default **Results** tab shows joint angles, endpoint coordinates and IK error
+without scrolling at the tested desktop sizes. The **Full derivation** tab uses native GTK/Pango labels with Greek symbols,
 subscripts, superscripts, stacked fractions, vectors and a rotation matrix.
 [Full IK worksheet](evidence/typeset-ik.png) · [Full FK worksheet](evidence/typeset-fk.png).
 The **Plain-text working** tab retains a linear, selectable transcript. Displayed
@@ -35,14 +36,21 @@ robot control.
 - **IK:** edit target X/Y/Z, bone lengths and elbow limits. The shoulder is at
   the origin. The red ring is the requested target; the dark endpoint is the
   computed wrist. A residual line connects them when the target is unreachable.
-- **FK:** check “Forward kinematics,” then edit shoulder yaw, shoulder pitch and
-  elbow flexion. Target controls become inactive. Angles directly determine the
+- **FK:** choose “FK — set joint angles,” then edit shoulder yaw, shoulder pitch
+  and elbow flexion. Only the active mode’s inputs are shown. Angles directly determine the
   elbow and wrist positions; out-of-limit flexion is rejected, not silently changed.
-- **Reverse elbow branch** selects the other bend direction. Switching modes
+- **Bend the elbow the other way** selects the other bend direction. Switching modes
   uses that mode's retained input values; it does not copy the previous solution.
-- Camera azimuth, elevation and zoom change only the view. Keyboard-editable
-  native spin controls update the geometry and math immediately. Alt plus the
-  underlined label focuses a field. Scroll the math pane to inspect all working.
+- **Hold middle mouse + drag** over the view to orbit the 3D camera. Horizontal
+  movement wraps around; vertical movement stops at ±85°. Release stops rotation.
+  **Reset view** restores azimuth −45°, elevation 25° and zoom 1× without changing
+  the pose. Left-button dragging does not rotate.
+- Expand **Camera / zoom controls** for keyboard-editable azimuth, elevation and
+  zoom. These change only the view, without rerunning the solver. Alt plus an
+  underlined label focuses a field; camera controls remain available without a mouse.
+- Settings are grouped into target or angles, bone lengths and elbow limits. The
+  sidebar scrolls independently on short windows. **Results** is compact; choose
+  **Full derivation** or **Plain-text working** for every calculation step.
 - The coordinate convention is **Z up**, right-handed world coordinates, arbitrary
   consistent length units. Grid spacing is one unit. Angles in controls are degrees;
   trigonometric calculations use radians. Flexion is 0° straight and 180° folded.
@@ -105,11 +113,15 @@ Implementation and illustrations are original; no private Bridge source is inclu
 make check       # independent Python oracle calls the actual assembly shared objects
 make ui-check    # needs an accessible display; offscreen windows only
 make install-check  # isolated temporary-home install / upgrade / rollback tests
+make pointer-check  # synthetic GDK events; requires Python PyGObject + GTK 3 typelib
 ```
 
 The fixture returns 77 if no display is available. UI tests use native control
 signals, IK/FK mode changes, invalid constraints and unreachable targets; PNGs
-are written to `evidence/`. They do not launch a visible application window.
+are written to `evidence/`. They do not launch a visible application window or move the physical pointer.
+The event test verifies middle-button routing, left-button rejection, motion beyond
+the canvas boundary, release, repeated drags, reset and scroll-free Results.
+Native gesture-signal checks also cover cancellation and camera wrap/clamp.
 See [verification](docs/VERIFICATION.md) and [security](SECURITY.md).
 
 ## Optional desktop installation
